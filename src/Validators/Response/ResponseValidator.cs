@@ -1,4 +1,4 @@
-﻿namespace src.Validators
+﻿namespace src.Validators.Response
 {
     public class ResponseValidator
     {

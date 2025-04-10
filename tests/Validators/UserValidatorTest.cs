@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using src.Models;
-using src.Validators;
+using src.Validators.User;
 
 namespace tests.Validators
 {
@@ -40,6 +40,17 @@ namespace tests.Validators
 
         {
             var user = new UserModel("Doe", "jonhdoe@gmail.com");
+
+            Assert.Throws<Exception>(() =>
+            {
+                UserValidator.validatorUsername(user.Username);
+            });
+        }
+
+        [Fact]
+        public void ValidateName_WhenIsWhiteSpace_ThrowsException()
+        {
+            var user = new UserModel("", "jonhdoe@gmail.com");
 
             Assert.Throws<Exception>(() =>
             {

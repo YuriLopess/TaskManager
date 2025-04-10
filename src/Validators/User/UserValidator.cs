@@ -1,4 +1,4 @@
-﻿namespace src.Validators
+﻿namespace src.Validators.User
 {
     public class UserValidator
     {
