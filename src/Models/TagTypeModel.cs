@@ -1,6 +1,6 @@
 ﻿namespace src.Models
 {
-    public enum TagType
+    public enum TagTypeModel
     {
         Work,
         Study,

@@ -1,6 +1,6 @@
 ﻿namespace src.Validators
 {
-    public class ResponsibleValidator
+    public class UserValidator
     {
     }
 }
