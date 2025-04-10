@@ -19,5 +19,17 @@ namespace src.Validators.User
             }
         }
 
+        public void validatorEmail(string email)
+        {
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                throw new UserValidationException("Invalid email format.");
+            }
+
+            if (email.Length > 320)
+            {
+                throw new UserValidationException("Email must not exceed 320 characters.");
+            }
+        }
     }
 }

@@ -105,9 +105,20 @@ namespace tests.Validators
         }
 
         [Fact]
-        public void ValidatorEmail__ThrowsException()
+        public void ValidatorEmail_WhenEmailIsInvalidFormat_ThrowsException()
         {
             var user = new UserModel("Jonh Doe", "jonhdoe.com");
+
+            Assert.Throws<UserValidationException>(() =>
+            {
+                _provider.validatorEmail(user.Email);
+            });
+        }
+
+        [Fact]
+        public void ValidatorEmail_EmptyEmail_ThrowsException()
+        {
+            var user = new UserModel("Jonh Doe", null);
 
             Assert.Throws<UserValidationException>(() =>
             {
