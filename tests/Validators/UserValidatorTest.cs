@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using src.Exceptions;
 using src.Models;
 using src.Validators.User;
 
@@ -12,15 +14,22 @@ namespace tests.Validators
     public class UserValidatorTest
     {
 
+        private readonly IUserValidator _provider;
+
+        public UserValidatorTest()
+        {
+            _provider = new UserValidator();
+        }
+
         [Fact]
         public void ValidateName_EmptyName_ThrowsException()
         {
 
             var user = new UserModel(null, "jonhdoe@gmail.com");
 
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<UserValidationException>(() =>
             {
-                UserValidator.validatorUsername(user.Username);
+                _provider.validatorUsername(user.Username);
             });
 
         }
@@ -30,8 +39,8 @@ namespace tests.Validators
         {
             var user = new UserModel("J@nh Doe", "jonhdoe@gmail.com");
 
-            Assert.Throws<Exception>(() => {
-                UserValidator.validatorUsername(user.Username);
+            Assert.Throws<UserValidationException>(() => {
+                _provider.validatorUsername(user.Username);
             });
 
         }
@@ -42,9 +51,9 @@ namespace tests.Validators
         {
             var user = new UserModel("Doe", "jonhdoe@gmail.com");
 
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<UserValidationException>(() =>
             {
-                UserValidator.validatorUsername(user.Username);
+                _provider.validatorUsername(user.Username);
             });
         }
 
@@ -55,9 +64,9 @@ namespace tests.Validators
 
             var user = new UserModel(longName, "jonhdoe@gmail.com");
 
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<UserValidationException>(() =>
             {
-                UserValidator.validatorUsername(user.Username);
+                _provider.validatorUsername(user.Username);
             });
         }
 
@@ -66,9 +75,9 @@ namespace tests.Validators
         {
             var user = new UserModel("", "jonhdoe@gmail.com");
 
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<UserValidationException>(() =>
             {
-                UserValidator.validatorUsername(user.Username);
+                _provider.validatorUsername(user.Username);
             });
         }
 
@@ -77,7 +86,7 @@ namespace tests.Validators
         {
             var user = new UserModel("Jonh Doe", "jonhdoe@gmail.com");
 
-            var exception = Record.Exception(() => UserValidator.validatorUsername(user.Username));
+            var exception = Record.Exception(() => _provider.validatorUsername(user.Username));
 
             Assert.Null(exception);
         }
