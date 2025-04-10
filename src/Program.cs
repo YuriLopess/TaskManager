@@ -1,10 +1,13 @@
-var builder = WebApplication.CreateBuilder(args);
+using src.Validators.User;
 
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserValidator, UserValidator>();
 
 var app = builder.Build();
 
@@ -21,3 +24,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

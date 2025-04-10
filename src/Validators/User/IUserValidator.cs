@@ -2,5 +2,6 @@
 {
     public interface IUserValidator
     {
+        public void validatorUsername(string name);
     }
 }

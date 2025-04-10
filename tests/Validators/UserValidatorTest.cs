@@ -15,6 +15,7 @@ namespace tests.Validators
         [Fact]
         public void ValidateName_EmptyName_ThrowsException()
         {
+
             var user = new UserModel(null, "jonhdoe@gmail.com");
 
             Assert.Throws<Exception>(() =>
@@ -48,6 +49,19 @@ namespace tests.Validators
         }
 
         [Fact]
+        public void ValidateName_WhenNameIsTooLong_ThrowsException()
+        {
+            var longName = new string('A', 51);
+
+            var user = new UserModel(longName, "jonhdoe@gmail.com");
+
+            Assert.Throws<Exception>(() =>
+            {
+                UserValidator.validatorUsername(user.Username);
+            });
+        }
+
+        [Fact]
         public void ValidateName_WhenIsWhiteSpace_ThrowsException()
         {
             var user = new UserModel("", "jonhdoe@gmail.com");
@@ -56,6 +70,16 @@ namespace tests.Validators
             {
                 UserValidator.validatorUsername(user.Username);
             });
+        }
+
+        [Fact]
+        public void ValidateName_WithAccentedLetters_DoesNotThrowException()
+        {
+            var user = new UserModel("Jonh Doe", "jonhdoe@gmail.com");
+
+            var exception = Record.Exception(() => UserValidator.validatorUsername(user.Username));
+
+            Assert.Null(exception);
         }
     }
 }
