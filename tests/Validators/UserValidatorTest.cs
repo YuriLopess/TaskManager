@@ -21,8 +21,9 @@ namespace tests.Validators
             _provider = new UserValidator();
         }
 
+
         [Fact]
-        public void ValidateName_EmptyName_ThrowsException()
+        public void ValidatorUsername_EmptyName_ThrowsException()
         {
 
             var user = new UserModel(null, "jonhdoe@gmail.com");
@@ -35,7 +36,7 @@ namespace tests.Validators
         }
 
         [Fact]
-        public void ValidateName_WhenContainsSpecialCharacter_ThrowsException()
+        public void ValidatorUsername_WhenContainsSpecialCharacter_ThrowsException()
         {
             var user = new UserModel("J@nh Doe", "jonhdoe@gmail.com");
 
@@ -46,7 +47,7 @@ namespace tests.Validators
         }
 
         [Fact]
-        public void ValidateName_WhenNameIsTooShort_ThrowsException()
+        public void ValidatorUsername_WhenNameIsTooShort_ThrowsException()
 
         {
             var user = new UserModel("Doe", "jonhdoe@gmail.com");
@@ -58,7 +59,7 @@ namespace tests.Validators
         }
 
         [Fact]
-        public void ValidateName_WhenNameIsTooLong_ThrowsException()
+        public void ValidatorUsername_WhenNameIsTooLong_ThrowsException()
         {
             var longName = new string('A', 51);
 
@@ -71,7 +72,7 @@ namespace tests.Validators
         }
 
         [Fact]
-        public void ValidateName_WhenIsWhiteSpace_ThrowsException()
+        public void ValidatorUsername_WhenIsWhiteSpace_ThrowsException()
         {
             var user = new UserModel("", "jonhdoe@gmail.com");
 
@@ -82,13 +83,36 @@ namespace tests.Validators
         }
 
         [Fact]
-        public void ValidateName_WithAccentedLetters_DoesNotThrowException()
+        public void ValidatorUsername_WithAccentedLetters_DoesNotThrowException()
         {
             var user = new UserModel("Jonh Doe", "jonhdoe@gmail.com");
 
             var exception = Record.Exception(() => _provider.validatorUsername(user.Username));
 
             Assert.Null(exception);
+        }
+
+        [Fact]
+        public void ValidatorEmail_WhenEmailIsTooLong_ThrowsException()
+        {
+            var longEmail = new string('A', 321);
+            var user = new UserModel("Jonh Doe", longEmail);
+
+            Assert.Throws<UserValidationException>(() =>
+            {
+                _provider.validatorEmail(user.Email);
+            });
+        }
+
+        [Fact]
+        public void ValidatorEmail__ThrowsException()
+        {
+            var user = new UserModel("Jonh Doe", "jonhdoe.com");
+
+            Assert.Throws<UserValidationException>(() =>
+            {
+                _provider.validatorEmail(user.Email);
+            });
         }
     }
 }
