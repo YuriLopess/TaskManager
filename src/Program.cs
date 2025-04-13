@@ -1,3 +1,4 @@
+using src.Validators.Response;
 using src.Validators.Task;
 using src.Validators.User;
 
@@ -10,6 +11,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserValidator, UserValidator>();
 builder.Services.AddScoped<ITaskValidator, TaskValidator>();
+builder.Services.AddScoped<IResponseValidator, ResponseValidator>();
 
 var app = builder.Build();
 

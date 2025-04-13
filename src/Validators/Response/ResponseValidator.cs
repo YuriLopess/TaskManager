@@ -1,6 +1,12 @@
-﻿namespace src.Validators.Response
+﻿using src.Models;
+
+namespace src.Validators.Response
 {
-    public class ResponseValidator
+    public class ResponseValidator : IResponseValidator
     {
+        public void ValidateResponse<T>(ResponseModel<T> response)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

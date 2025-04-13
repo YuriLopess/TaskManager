@@ -1,6 +1,9 @@
-﻿namespace src.Validators.Response
+﻿using src.Models;
+
+namespace src.Validators.Response
 {
-    public interface IResponseValidator
+    public interface IResponseValidator 
     {
+        void ValidateResponse<T>(ResponseModel<T> response);
     }
 }
