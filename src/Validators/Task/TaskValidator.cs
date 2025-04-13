@@ -1,6 +1,6 @@
 ﻿namespace src.Validators.Task
 {
-    public class TaskValidator
+    public class TaskValidator : ITaskValidator
     {
     }
 }

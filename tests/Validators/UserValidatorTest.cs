@@ -21,14 +21,13 @@ namespace tests.Validators
             _provider = new UserValidator();
         }
 
-
         [Fact]
         public void ValidatorUsername_EmptyName_ThrowsException()
         {
 
             var user = new UserModel(null, "jonhdoe@gmail.com");
 
-            Assert.Throws<UserValidationException>(() =>
+            Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorUsername(user.Username);
             });
@@ -40,7 +39,7 @@ namespace tests.Validators
         {
             var user = new UserModel("J@nh Doe", "jonhdoe@gmail.com");
 
-            Assert.Throws<UserValidationException>(() => {
+            Assert.Throws<DomainValidationException>(() => {
                 _provider.validatorUsername(user.Username);
             });
 
@@ -52,7 +51,7 @@ namespace tests.Validators
         {
             var user = new UserModel("Doe", "jonhdoe@gmail.com");
 
-            Assert.Throws<UserValidationException>(() =>
+            Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorUsername(user.Username);
             });
@@ -65,7 +64,7 @@ namespace tests.Validators
 
             var user = new UserModel(longName, "jonhdoe@gmail.com");
 
-            Assert.Throws<UserValidationException>(() =>
+            Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorUsername(user.Username);
             });
@@ -76,7 +75,7 @@ namespace tests.Validators
         {
             var user = new UserModel("", "jonhdoe@gmail.com");
 
-            Assert.Throws<UserValidationException>(() =>
+            Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorUsername(user.Username);
             });
@@ -98,7 +97,7 @@ namespace tests.Validators
             var longEmail = new string('A', 321);
             var user = new UserModel("Jonh Doe", longEmail);
 
-            Assert.Throws<UserValidationException>(() =>
+            Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorEmail(user.Email);
             });
@@ -109,7 +108,7 @@ namespace tests.Validators
         {
             var user = new UserModel("Jonh Doe", "jonhdoe.com");
 
-            Assert.Throws<UserValidationException>(() =>
+            Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorEmail(user.Email);
             });
@@ -120,7 +119,7 @@ namespace tests.Validators
         {
             var user = new UserModel("Jonh Doe", null);
 
-            Assert.Throws<UserValidationException>(() =>
+            Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorEmail(user.Email);
             });

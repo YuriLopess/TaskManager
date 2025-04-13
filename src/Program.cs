@@ -1,3 +1,4 @@
+using src.Validators.Task;
 using src.Validators.User;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserValidator, UserValidator>();
+builder.Services.AddScoped<ITaskValidator, TaskValidator>();
 
 var app = builder.Build();
 

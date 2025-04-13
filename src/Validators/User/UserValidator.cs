@@ -10,12 +10,12 @@ namespace src.Validators.User
         {
             if (string.IsNullOrWhiteSpace(name) || name.Length < 8 || name.Length > 50)
             {
-                throw new UserValidationException("Name must be between 8 and 50 characters long and cannot be empty.");
+                throw new DomainValidationException("Name must be between 8 and 50 characters long and cannot be empty.");
             }
 
             if (!Regex.IsMatch(name, @"^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$"))
             {
-                throw new UserValidationException("Name can only contain letters and spaces.");
+                throw new DomainValidationException("Name can only contain letters and spaces.");
             }
         }
 
@@ -23,12 +23,12 @@ namespace src.Validators.User
         {
             if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                throw new UserValidationException("Invalid email format.");
+                throw new DomainValidationException("Invalid email format.");
             }
 
             if (email.Length > 320)
             {
-                throw new UserValidationException("Email must not exceed 320 characters.");
+                throw new DomainValidationException("Email must not exceed 320 characters.");
             }
         }
     }
