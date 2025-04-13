@@ -2,5 +2,8 @@
 {
     public interface ITaskValidator
     {
+
+        public void ValidatorTitle(string Title);
+        public void ValidatorDescription(string Description);
     }
 }
