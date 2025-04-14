@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using src.Data;
 using src.Validators.Response;
 using src.Validators.Task;
 using src.Validators.User;
@@ -12,6 +14,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserValidator, UserValidator>();
 builder.Services.AddScoped<ITaskValidator, TaskValidator>();
 builder.Services.AddScoped<IResponseValidator, ResponseValidator>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 var app = builder.Build();
 
@@ -28,4 +35,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
