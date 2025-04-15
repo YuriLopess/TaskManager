@@ -5,8 +5,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using src.Dto;
 using src.Exceptions;
-using src.Models;
 using src.Validators.User;
 
 namespace tests.Validators
@@ -25,7 +25,7 @@ namespace tests.Validators
         public void ValidatorUsername_EmptyName_ThrowsException()
         {
 
-            var user = new UserModel(null, "jonhdoe@gmail.com");
+            var user = new UserDTO(null, "jonhdoe@gmail.com");
 
             Assert.Throws<DomainValidationException>(() =>
             {
@@ -37,7 +37,7 @@ namespace tests.Validators
         [Fact]
         public void ValidatorUsername_WhenContainsSpecialCharacter_ThrowsException()
         {
-            var user = new UserModel("J@nh Doe", "jonhdoe@gmail.com");
+            var user = new UserDTO("J@nh Doe", "jonhdoe@gmail.com");
 
             Assert.Throws<DomainValidationException>(() => {
                 _provider.validatorUsername(user.Username);
@@ -49,7 +49,7 @@ namespace tests.Validators
         public void ValidatorUsername_WhenNameIsTooShort_ThrowsException()
 
         {
-            var user = new UserModel("Doe", "jonhdoe@gmail.com");
+            var user = new UserDTO("Doe", "jonhdoe@gmail.com");
 
             Assert.Throws<DomainValidationException>(() =>
             {
@@ -62,7 +62,7 @@ namespace tests.Validators
         {
             var longName = new string('A', 51);
 
-            var user = new UserModel(longName, "jonhdoe@gmail.com");
+            var user = new UserDTO(longName, "jonhdoe@gmail.com");
 
             Assert.Throws<DomainValidationException>(() =>
             {
@@ -73,7 +73,7 @@ namespace tests.Validators
         [Fact]
         public void ValidatorUsername_WhenIsWhiteSpace_ThrowsException()
         {
-            var user = new UserModel("", "jonhdoe@gmail.com");
+            var user = new UserDTO("", "jonhdoe@gmail.com");
 
             Assert.Throws<DomainValidationException>(() =>
             {
@@ -84,7 +84,7 @@ namespace tests.Validators
         [Fact]
         public void ValidatorUsername_WithAccentedLetters_DoesNotThrowException()
         {
-            var user = new UserModel("Jonh Doe", "jonhdoe@gmail.com");
+            var user = new UserDTO("Jonh Doe", "jonhdoe@gmail.com");
 
             var exception = Record.Exception(() => _provider.validatorUsername(user.Username));
 
@@ -95,7 +95,7 @@ namespace tests.Validators
         public void ValidatorEmail_WhenEmailIsTooLong_ThrowsException()
         {
             var longEmail = new string('A', 321);
-            var user = new UserModel("Jonh Doe", longEmail);
+            var user = new UserDTO("Jonh Doe", longEmail);
 
             Assert.Throws<DomainValidationException>(() =>
             {
@@ -106,7 +106,7 @@ namespace tests.Validators
         [Fact]
         public void ValidatorEmail_WhenEmailIsInvalidFormat_ThrowsException()
         {
-            var user = new UserModel("Jonh Doe", "jonhdoe.com");
+            var user = new UserDTO("Jonh Doe", "jonhdoe.com");
 
             Assert.Throws<DomainValidationException>(() =>
             {
@@ -117,7 +117,7 @@ namespace tests.Validators
         [Fact]
         public void ValidatorEmail_EmptyEmail_ThrowsException()
         {
-            var user = new UserModel("Jonh Doe", null);
+            var user = new UserDTO("Jonh Doe", null);
 
             Assert.Throws<DomainValidationException>(() =>
             {
