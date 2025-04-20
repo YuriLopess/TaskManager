@@ -119,7 +119,7 @@ namespace tests.Validators
         {
             var user = new UserDTO("Jonh Doe", null);
 
-            Assert.Throws<DomainValidationException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 _provider.validatorEmail(user.Email);
             });
