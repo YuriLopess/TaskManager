@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using src.Dto;
 using src.Exceptions;
 using src.Validators.User;
@@ -13,7 +7,6 @@ namespace tests.Validators
 {
     public class UserValidatorTest
     {
-
         private readonly IUserValidator _provider;
 
         public UserValidatorTest()
@@ -24,14 +17,14 @@ namespace tests.Validators
         [Fact]
         public void ValidatorUsername_EmptyName_ThrowsException()
         {
-
             var user = new UserDTO(null, "jonhdoe@gmail.com");
 
-            Assert.Throws<DomainValidationException>(() =>
+            var ex = Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorUsername(user.Username);
             });
 
+            Assert.Equal("Name must be between 8 and 50 characters long and cannot be empty.", ex.Message);
         }
 
         [Fact]
@@ -39,35 +32,52 @@ namespace tests.Validators
         {
             var user = new UserDTO("J@nh Doe", "jonhdoe@gmail.com");
 
-            Assert.Throws<DomainValidationException>(() => {
+            var ex = Assert.Throws<DomainValidationException>(() => {
                 _provider.validatorUsername(user.Username);
             });
 
+            Assert.Equal("Name can only contain letters and spaces.", ex.Message);
         }
 
         [Fact]
         public void ValidatorUsername_WhenNameIsTooShort_ThrowsException()
-
         {
             var user = new UserDTO("Doe", "jonhdoe@gmail.com");
 
-            Assert.Throws<DomainValidationException>(() =>
+            var ex = Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorUsername(user.Username);
             });
+
+            Assert.Equal("Name must be between 8 and 50 characters long and cannot be empty.", ex.Message);
         }
 
         [Fact]
         public void ValidatorUsername_WhenNameIsTooLong_ThrowsException()
         {
             var longName = new string('A', 51);
-
             var user = new UserDTO(longName, "jonhdoe@gmail.com");
 
-            Assert.Throws<DomainValidationException>(() =>
+            var ex = Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorUsername(user.Username);
             });
+
+            Assert.Equal("Name must be between 8 and 50 characters long and cannot be empty.", ex.Message);
+        }
+
+        [Fact]
+        public void ValidatorUsarname_WhenNameExactly50Characters_DoesNotThrowException()
+        {
+            var longName = new string('A', 50);
+            var user = new UserDTO(longName, "jonhdoe@gmail.com");
+
+            var exception = Record.Exception(() =>
+            {
+                _provider.validatorUsername(user.Username);
+            });
+
+            Assert.Null(exception);
         }
 
         [Fact]
@@ -75,10 +85,12 @@ namespace tests.Validators
         {
             var user = new UserDTO("", "jonhdoe@gmail.com");
 
-            Assert.Throws<DomainValidationException>(() =>
+            var ex = Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorUsername(user.Username);
             });
+
+            Assert.Equal("Name must be between 8 and 50 characters long and cannot be empty.", ex.Message);
         }
 
         [Fact]
@@ -94,13 +106,18 @@ namespace tests.Validators
         [Fact]
         public void ValidatorEmail_WhenEmailIsTooLong_ThrowsException()
         {
-            var longEmail = new string('A', 321);
+            var localPart = new string('A', 321);
+            var domain = "@email.com";
+            var longEmail = localPart + domain;
+
             var user = new UserDTO("Jonh Doe", longEmail);
 
-            Assert.Throws<DomainValidationException>(() =>
+            var ex = Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorEmail(user.Email);
             });
+
+            Assert.Equal("Email must not exceed 320 characters.", ex.Message);
         }
 
         [Fact]
@@ -108,10 +125,12 @@ namespace tests.Validators
         {
             var user = new UserDTO("Jonh Doe", "jonhdoe.com");
 
-            Assert.Throws<DomainValidationException>(() =>
+            var ex = Assert.Throws<DomainValidationException>(() =>
             {
                 _provider.validatorEmail(user.Email);
             });
+
+            Assert.Equal("Invalid email format.", ex.Message);
         }
 
         [Fact]
@@ -123,6 +142,22 @@ namespace tests.Validators
             {
                 _provider.validatorEmail(user.Email);
             });
+        }
+
+        [Fact]
+        public void ValidatorEmail_WhenEmailExactly320Characters_DoesNotThrowException()
+        {
+            var localPart = new string('a', 310);
+            var email = localPart + "@gmail.com";
+
+            var user = new UserDTO("Jonh Doe", email);
+
+            var exception = Record.Exception(() =>
+            {
+                _provider.validatorEmail(user.Email);
+            });
+
+            Assert.Null(exception);
         }
     }
 }
