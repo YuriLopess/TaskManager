@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 using src.Exceptions;
 using src.Models;
 using src.Validators.Response;
@@ -19,7 +16,20 @@ namespace tests.Validators
         }
 
         [Fact]
-        public void ValidateResponse_WhenSuccessWithoutData_ThrowsException()
+        public void ValidateResponse_WhenResponseIsNull_ThrowsException()
+        {
+            ResponseModel<string> response = null;
+
+            var ex = Assert.Throws<DomainValidationException>(() =>
+            {
+                _validator.ValidateResponse(response);
+            });
+
+            Assert.Equal("Response object cannot be null.", ex.Message);
+        }
+
+        [Fact]
+        public void ValidateResponse_WhenStatusTrueAndDataIsNull_ThrowsException()
         {
             var response = new ResponseModel<string>
             {
@@ -28,11 +38,16 @@ namespace tests.Validators
                 Status = true
             };
 
-            Assert.Throws<DomainValidationException>(() => _validator.ValidateResponse(response));
+            var ex = Assert.Throws<DomainValidationException>(() =>
+            {
+                _validator.ValidateResponse(response);
+            });
+
+            Assert.Equal("Successful responses must contain data.", ex.Message);
         }
 
         [Fact]
-        public void ValidateResponse_WhenErrorWithoutMessage_ThrowsException()
+        public void ValidateResponse_WhenStatusFalseAndMessageIsEmpty_ThrowsException()
         {
             var response = new ResponseModel<string>
             {
@@ -41,7 +56,12 @@ namespace tests.Validators
                 Status = false
             };
 
-            Assert.Throws<DomainValidationException>(() => _validator.ValidateResponse(response));
+            var ex = Assert.Throws<DomainValidationException>(() =>
+            {
+                _validator.ValidateResponse(response);
+            });
+
+            Assert.Equal("Error responses must contain a message.", ex.Message);
         }
 
         [Fact]
@@ -56,8 +76,68 @@ namespace tests.Validators
                 Status = true
             };
 
-            Assert.Throws<DomainValidationException>(() => _validator.ValidateResponse(response));
+            var ex = Assert.Throws<DomainValidationException>(() =>
+            {
+                _validator.ValidateResponse(response);
+            });
+
+            Assert.Equal("Message must be at most 300 characters long.", ex.Message);
+        }
+
+
+        [Fact]
+        public void ValidateResponse_WhenMessageIsExactly300Characters_DoesNotThrowException()
+        {
+            var message = new string('A', 300);
+            var response = new ResponseModel<string>
+            {
+                Data = "Valid data",
+                Message = message,
+                Status = true
+            };
+
+            var exception = Record.Exception(() =>
+            {
+                _validator.ValidateResponse(response);
+            });
+
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void ValidateResponse_WhenStatusFalseAndMessageIsValid_DoesNotThrowException()
+        {
+            var response = new ResponseModel<string>
+            {
+                Data = null,
+                Message = "An error occurred.",
+                Status = false
+            };
+
+            var exception = Record.Exception(() =>
+            {
+                _validator.ValidateResponse(response);
+            });
+
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void ValidateResponse_WhenStatusTrueAndDataIsPresent_DoesNotThrowException()
+        {
+            var response = new ResponseModel<string>
+            {
+                Data = "This is valid data",
+                Message = "Success",
+                Status = true
+            };
+
+            var exception = Record.Exception(() =>
+            {
+                _validator.ValidateResponse(response);
+            });
+
+            Assert.Null(exception);
         }
     }
-
 }
