@@ -7,7 +7,7 @@ namespace src.Services.Task
     {
         Task<ResponseModel<List<TaskModel>>> DeleteTask (Guid id);
         Task<ResponseModel<List<TaskModel>>> PostTask(TaskDTO task);
-        Task<ResponseModel<List<TaskModel>>> PutTask(TaskDTO task);
-        Task<ResponseModel<List<TaskModel>>> GetTask(Guid id);
+        Task<ResponseModel<TaskModel>> PutTask(TaskDTO task);
+        Task<ResponseModel<TaskModel>> GetTask(Guid id);
     }
 }
