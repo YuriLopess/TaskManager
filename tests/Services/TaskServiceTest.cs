@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using src.Data;
+using tests.Fixtures;
 
 namespace tests.Services
 {
-    public class TaskServiceTest
+    public class TaskServiceTest : IClassFixture<DatabaseFixture>
     {
-        private AppDbContext GetInMemoryDbContext()
+        private readonly AppDbContext _context;
+
+        public TaskServiceTest(DatabaseFixture fixture)
         {
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options;
-
-            return new AppDbContext(options);
+            _context = fixture.Context;
         }
-
     }
 }

@@ -8,18 +8,17 @@ using src.Data;
 using src.Dto;
 using src.Models;
 using src.Services.User;
+using tests.Fixtures;
 
 namespace tests.Services
 {
-    public class UserServiceTest
+    public class UserServiceTest : IClassFixture<DatabaseFixture>
     {
-        private AppDbContext GetInMemoryDbContext()
-        {
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options;
+        private readonly AppDbContext _context;
 
-            return new AppDbContext(options);
+        public UserServiceTest(DatabaseFixture fixture)
+        {
+            _context = fixture.Context; 
         }
 
         [Fact]
@@ -28,8 +27,7 @@ namespace tests.Services
             // arrange
             var user = new UserDTO("UsernameTest", "jonhdoe@gmail.com");
 
-            var context = GetInMemoryDbContext();
-            var service = new UserService(context);
+            var service = new UserService(_context);
 
             // act
             service.PostUser(user);
