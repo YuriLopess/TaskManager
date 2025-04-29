@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using src.Data;
 using src.Dto;
 using src.Models;
 using src.Services.User;
@@ -12,12 +13,14 @@ namespace tests.Services
 {
     public class UserServiceTest
     {
-        private readonly IUserService _service; 
-
-        public UserServiceTest(IUserService service) 
+        private AppDbContext GetInMemoryDbContext()
         {
-            _service = service;
-        }   
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
+
+            return new AppDbContext(options);
+        }
 
         [Fact]
         public void SaveUser()
@@ -25,11 +28,14 @@ namespace tests.Services
             // arrange
             var user = new UserDTO("UsernameTest", "jonhdoe@gmail.com");
 
+            var context = GetInMemoryDbContext();
+            var service = new UserService(context);
+
             // act
-            _service.PostUser(user);
+            service.PostUser(user);
 
             // assert
-            var userSave = _service.GetUser(user.Id);
+            var userSave = service.GetUser(user.Id);
             Assert.NotNull(userSave);
         }
     }
