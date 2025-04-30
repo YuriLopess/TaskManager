@@ -12,7 +12,8 @@ using tests.Fixtures;
 
 namespace tests.Services
 {
-    public class UserServiceTest : IClassFixture<DatabaseFixture>
+    [Collection(nameof(DatabaseCollectionFixture))]
+    public class UserServiceTest
     {
         private readonly AppDbContext _context;
 

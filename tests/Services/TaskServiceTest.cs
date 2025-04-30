@@ -10,7 +10,8 @@ using tests.Fixtures;
 
 namespace tests.Services
 {
-    public class TaskServiceTest : IClassFixture<DatabaseFixture>
+    [Collection(nameof(DatabaseCollectionFixture))]
+    public class TaskServiceTest
     {
         private readonly AppDbContext _context;
 

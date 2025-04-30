@@ -21,9 +21,16 @@ namespace tests.Fixtures
             Context = new AppDbContext(options);
         }
 
+        public void ClearDatabase()
+        {
+            Context.Database.ExecuteSqlRaw("DELETE FROM Users ");
+            Context.Database.ExecuteSqlRaw("DELETE FROM Tasks");
+        }
+
         public void Dispose()
         {
             Context.Dispose();
         }
+
     }
 }
