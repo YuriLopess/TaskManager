@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using src.Dto;
 using src.Models;
 using src.Services.User;
 
@@ -20,26 +21,29 @@ namespace src.Controllers
         [HttpGet("GetUser/{idUser}")]
         public async Task<ActionResult<ResponseModel<UserModel>>> GetUser(Guid idUser)
         {
-            var user = _service.GetUser(idUser);
+            var user = await _service.GetUser(idUser);
             return Ok(user);  
         }
 
         [HttpDelete("DeleteUser")]
-        public async Task<ActionResult<ResponseModel<UserModel>>> DeleteUser()
+        public async Task<ActionResult<ResponseModel<UserModel>>> DeleteUser(Guid id)
         {
-
+            var user = await _service.DeleteUser(id);
+            return Ok(user);
         }
 
         [HttpPost("PostUser")]
-        public async Task<ActionResult<ResponseModel<UserModel>>> PostUser()
+        public async Task<ActionResult<ResponseModel<UserModel>>> PostUser([FromBody] UserDTO userDto)
         {
-
+            var user = await _service.PostUser(userDto);
+            return Ok(user);
         }
 
         [HttpPut("PutUser")]
-        public async Task<ActionResult<ResponseModel<UserModel>>> PutUser()
+        public async Task<ActionResult<ResponseModel<UserModel>>> PutUser([FromBody] UserDTO userDto)
         {
-
+            var user = await _service.PutUser(userDto);
+            return Ok(user);
         }
     }
 }
