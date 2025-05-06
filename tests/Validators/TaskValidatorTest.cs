@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
-using src.Dto;
+﻿using src.Dto;
 using src.Exceptions;
 using src.Models;
 using src.Validators.Task;
